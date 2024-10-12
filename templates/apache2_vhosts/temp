@@ -1,0 +1,8 @@
+var domains = value.trim().split(/\s+/);
+var json = [];
+for (var i = 0; i < domains.length; i++)
+  {
+  var domain = { "{#DOMAIN}": domains[i] };
+  json.push(domain );
+  }
+return JSON.stringify({ "data": json });
