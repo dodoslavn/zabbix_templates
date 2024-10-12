@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2024-10-12T10:50:57Z</date>
+    <groups>
+        <group>
+            <uuid>484f2c3b78b94999bd449c2fe88e3592</uuid>
+            <name>Physical Machines</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>efe802e2b43546f8b50955baf11a3cf8</uuid>
+            <template>Template Sensors</template>
+            <name>Custom Template Sensors</name>
+            <groups>
+                <group>
+                    <name>Physical Machines</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>4629148fb9ba4f6db4c6dab2b2d6984b</uuid>
+                    <name>Custom: Sensors data</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>custom.sensors</key>
+                    <history>0</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                </item>
+                <item>
+                    <uuid>9b61c18abf7d4791afde67ab89c1cef0</uuid>
+                    <name>Custom: CPU temperature</name>
+                    <type>DEPENDENT</type>
+                    <key>custom.sensors.data.dep.cpu</key>
+                    <delay>0</delay>
+                    <value_type>FLOAT</value_type>
+                    <units>°C</units>
+                    <preprocessing>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>{$SENSORS.CPUPATH}</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>custom.sensors</key>
+                    </master_item>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>20d4570457a34917984c6c70edbc3704</uuid>
+                    <name>Custom Sensors ( power ) discovery</name>
+                    <type>DEPENDENT</type>
+                    <key>custom.sensors.psu.discovery</key>
+                    <delay>0</delay>
+                    <filter>
+                        <conditions>
+                            <condition>
+                                <macro>{#SENSORNAME}</macro>
+                                <value>.*power.*</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>5db1c28226994b6ab98bd58124ceaa64</uuid>
+                            <name>Custom: Discovery: Sensor ( power) - &quot;{#SENSORNAME}&quot;</name>
+                            <type>DEPENDENT</type>
+                            <key>custom.sensors.psu.discovery[&quot;{#SENSORNAME}&quot;]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>W</units>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>var json1 = JSON.parse(value);
+
+var pom1 = '';
+var pom2 = '';
+for (var item1 in json1) {
+
+    for (var item2 in json1[item1])
+        {
+        if ( typeof json1[item1][item2] === 'object' )
+            {
+            for ( item3 in json1[item1][item2] )
+                { 
+                if (pom1 != '') pom1 = pom1 + ',';
+                pom1=pom1+' &quot;'+item1+'.'+item2+'.'+item3+'&quot;: '+json1[item1][item2][item3]+' '; 
+                if (pom2 != '') pom2 = pom2 + ',';
+                pom2=pom2+' {&quot;{#SENSORNAME}&quot;: &quot;'+item1+'.'+item2+'.'+item3+'&quot; }'; 
+                }
+            }
+        }    }
+pom = '{ &quot;values&quot;: {'+pom1+'}, &quot;discovery&quot;: ['+pom2+'] }';
+
+return pom;</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.['values'].['{#SENSORNAME}']</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>custom.sensors</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>custom.sensors</key>
+                    </master_item>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>var json1 = JSON.parse(value);
+
+var pom1 = '';
+var pom2 = '';
+for (var item1 in json1) {
+
+    for (var item2 in json1[item1])
+        {
+        if ( typeof json1[item1][item2] === 'object' )
+            {
+            for ( item3 in json1[item1][item2] )
+                { 
+                if (pom1 != '') pom1 = pom1 + ',';
+                pom1=pom1+' &quot;'+item1+'.'+item2+'.'+item3+'&quot;: '+json1[item1][item2][item3]+' '; 
+                if (pom2 != '') pom2 = pom2 + ',';
+                pom2=pom2+' {&quot;{#SENSORNAME}&quot;: &quot;'+item1+'.'+item2+'.'+item3+'&quot; }'; 
+                }
+            }
+        }    }
+pom = '{ &quot;values&quot;: {'+pom1+'}, &quot;discovery&quot;: ['+pom2+'] }';
+
+return pom;</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.discovery.*</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>736eb256bb114e21aed6e0dc200d1950</uuid>
+                    <name>Custom Sensors ( temperature ) discovery</name>
+                    <type>DEPENDENT</type>
+                    <key>custom.sensors.temp.discovery</key>
+                    <delay>0</delay>
+                    <filter>
+                        <evaltype>AND</evaltype>
+                        <conditions>
+                            <condition>
+                                <macro>{#SENSORNAME}</macro>
+                                <value>.*input</value>
+                                <formulaid>A</formulaid>
+                            </condition>
+                            <condition>
+                                <macro>{#SENSORNAME}</macro>
+                                <value>.*power.*</value>
+                                <operator>NOT_MATCHES_REGEX</operator>
+                                <formulaid>B</formulaid>
+                            </condition>
+                        </conditions>
+                    </filter>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>1feb52d06b7b4d93a0c8656ca502ade6</uuid>
+                            <name>Custom: Discovery: Sensor ( temp ) - &quot;{#SENSORNAME}&quot;</name>
+                            <type>DEPENDENT</type>
+                            <key>custom.sensors.temp.discovery[&quot;{#SENSORNAME}&quot;]</key>
+                            <delay>0</delay>
+                            <value_type>FLOAT</value_type>
+                            <units>°C</units>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>var json1 = JSON.parse(value);
+
+var pom1 = '';
+var pom2 = '';
+for (var item1 in json1) {
+
+    for (var item2 in json1[item1])
+        {
+        if ( typeof json1[item1][item2] === 'object' )
+            {
+            for ( item3 in json1[item1][item2] )
+                { 
+                if (pom1 != '') pom1 = pom1 + ',';
+                pom1=pom1+' &quot;'+item1+'.'+item2+'.'+item3+'&quot;: '+json1[item1][item2][item3]+' '; 
+                if (pom2 != '') pom2 = pom2 + ',';
+                pom2=pom2+' {&quot;{#SENSORNAME}&quot;: &quot;'+item1+'.'+item2+'.'+item3+'&quot; }'; 
+                }
+            }
+        }    }
+pom = '{ &quot;values&quot;: {'+pom1+'}, &quot;discovery&quot;: ['+pom2+'] }';
+
+return pom;</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$.['values'].['{#SENSORNAME}']</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>custom.sensors</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>custom.sensors</key>
+                    </master_item>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>var json1 = JSON.parse(value);
+
+var pom1 = '';
+var pom2 = '';
+for (var item1 in json1) {
+
+    for (var item2 in json1[item1])
+        {
+        if ( typeof json1[item1][item2] === 'object' )
+            {
+            for ( item3 in json1[item1][item2] )
+                { 
+                if (pom1 != '') pom1 = pom1 + ',';
+                pom1=pom1+' &quot;'+item1+'.'+item2+'.'+item3+'&quot;: '+json1[item1][item2][item3]+' '; 
+                if (pom2 != '') pom2 = pom2 + ',';
+                pom2=pom2+' {&quot;{#SENSORNAME}&quot;: &quot;'+item1+'.'+item2+'.'+item3+'&quot; }'; 
+                }
+            }
+        }    }
+pom = '{ &quot;values&quot;: {'+pom1+'}, &quot;discovery&quot;: ['+pom2+'] }';
+
+return pom;</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>JSONPATH</type>
+                            <parameters>
+                                <parameter>$.discovery.*</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </discovery_rule>
+            </discovery_rules>
+            <macros>
+                <macro>
+                    <macro>{$SENSORS.CPUPATH}</macro>
+                </macro>
+            </macros>
+        </template>
+    </templates>
+</zabbix_export>
