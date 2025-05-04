@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>dc579cd7a1a34222933f24f52a68bcd8</uuid>
+            <name>Linux servers</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>a81202c5824941328d1d649e4b9ab9d4</uuid>
+            <template>Template Fail2Ban</template>
+            <name>Custom Template Fail2Ban</name>
+            <groups>
+                <group>
+                    <name>Linux servers</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>b025148f584e41f9b373b0598f154a03</uuid>
+                    <name>Fail2Ban - Get data</name>
+                    <key>custom.iptables_f2b</key>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <preprocessing>
+                        <step>
+                            <type>JAVASCRIPT</type>
+                            <parameters>
+                                <parameter>// Split the input by newlines
+var lines = value.split(&quot;\n&quot;);
+
+// Prepare the JSON data array
+var data = [];
+
+// Loop through each line and process it
+for (var i = 0; i &lt; lines.length; i++) {
+    var parts = lines[i].split(&quot;;&quot;);
+
+    // Ensure the line has both jail name and status
+    if (parts.length === 2) {
+        var jail = parts[0];
+        var status = parts[1];
+
+        // Push the object to the data array
+        data.push({
+            &quot;JAILNAME&quot;: jail,
+            &quot;STATUS&quot;: status
+        });
+    }
+}
+
+// Return the final JSON object
+return JSON.stringify({ &quot;data&quot;: data });</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                </item>
+                <item>
+                    <uuid>49c56fbd54b945399bc713259ff4b677</uuid>
+                    <name>Fail2Ban - Get data (discovery)</name>
+                    <type>DEPENDENT</type>
+                    <key>dep.iptables_f2b</key>
+                    <delay>0</delay>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>JAILNAME</parameter>
+                                <parameter>{#JAILNAME}</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>STATUS</parameter>
+                                <parameter>(#STATUS)</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>custom.iptables_f2b</key>
+                    </master_item>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>1c219fee9bdb4035baed504c3eca9100</uuid>
+                    <name>Fail2Ban - current bans</name>
+                    <type>DEPENDENT</type>
+                    <key>disco.iptables_f2b</key>
+                    <delay>0</delay>
+                    <lifetime>30d</lifetime>
+                    <enabled_lifetime_type>DISABLE_NEVER</enabled_lifetime_type>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>32363a04b2d04c838d34893e6d5ed0fd</uuid>
+                            <name>Fail2ban - ban list length for service {#JAILNAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>disco.iptables_f2b_jail[{#JAILNAME}]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$..[?(@.JAILNAME == &quot;{#JAILNAME}&quot;)].STATUS</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$[0]</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>custom.iptables_f2b</key>
+                            </master_item>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>dep.iptables_f2b</key>
+                    </master_item>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
