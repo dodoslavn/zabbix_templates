@@ -7,7 +7,7 @@ This template for Zabbix is intended to get all values which tool lm-sensors rep
 - test if the utility works and what it reports
   - > sensors
 - allow custom scripts in Zabbix Agent
-- add new UserParameter into Zabbix Agent config file
+- add new UserParameter into Zabbix Agent config file (or see UserParam.conf file)
   - > UserParameter=custom.sensors,/usr/bin/sensors -j
 - import the template in Zabbix GUI
 - open Host in Zabbix GUI
