@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>7.0</version>
+    <template_groups>
+        <template_group>
+            <uuid>dc579cd7a1a34222933f24f52a68bcd8</uuid>
+            <name>Linux servers</name>
+        </template_group>
+    </template_groups>
+    <templates>
+        <template>
+            <uuid>d5503444c6e74fb1964f7a430b77a693</uuid>
+            <template>Custom Template Apache2 - simple</template>
+            <name>Custom Template Apache2 - simple</name>
+            <groups>
+                <group>
+                    <name>Linux servers</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>5666d594e9ca40b0bdc2d3adbf0ab086</uuid>
+                    <name>List all Apache2 domains - HTTP</name>
+                    <key>custom.apache2_simple-list_domains-plain</key>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <triggers>
+                        <trigger>
+                            <uuid>de5ed28b5eb64f5693e8b4439717b44d</uuid>
+                            <expression>change(/Custom Template Apache2 - simple/custom.apache2_simple-list_domains-plain)=1</expression>
+                            <name>List of Apache2 domains for HTTP has changed</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>143fdcee149945f4b467508cb6fb79bf</uuid>
+                    <name>List all Apache2 domains - HTTPS</name>
+                    <key>custom.apache2_simple-list_domains-ssl</key>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <triggers>
+                        <trigger>
+                            <uuid>778f7cf016b54603bc5e95142ee54095</uuid>
+                            <expression>change(/Custom Template Apache2 - simple/custom.apache2_simple-list_domains-ssl)=1</expression>
+                            <name>List of Apache2 domains for HTTPS has changed</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>abc286cb5484405ea669f934edfa11d2</uuid>
+                    <name>List all Apache2 services</name>
+                    <key>custom.apache2_simple-list_instances</key>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <triggers>
+                        <trigger>
+                            <uuid>bba0d22373e24f3a8e7136f2c12c9c3b</uuid>
+                            <expression>change(/Custom Template Apache2 - simple/custom.apache2_simple-list_instances)=1</expression>
+                            <name>List of Apache2 instances has changed</name>
+                            <priority>INFO</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>80147cdb69754332bc4aae339c464c72</uuid>
+                    <name>List all Apache2 domains - HTTP (discovery)</name>
+                    <type>DEPENDENT</type>
+                    <key>discovery.apache2_simple-list_domains-plain</key>
+                    <delay>0</delay>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;instance&quot;:</parameter>
+                                <parameter>&quot;{#SERVER}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;domain&quot;:</parameter>
+                                <parameter>&quot;{#NAME}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>custom.apache2_simple-list_domains-plain</key>
+                    </master_item>
+                </item>
+                <item>
+                    <uuid>b144d0a6634d40ed8c8b925b1ad3fb44</uuid>
+                    <name>List all Apache2 domains - HTTPS (discovery)</name>
+                    <type>DEPENDENT</type>
+                    <key>discovery.apache2_simple-list_domains-ssl</key>
+                    <delay>0</delay>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;instance&quot;:</parameter>
+                                <parameter>&quot;{#SERVER}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;domain&quot;:</parameter>
+                                <parameter>&quot;{#NAME}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>custom.apache2_simple-list_domains-ssl</key>
+                    </master_item>
+                </item>
+                <item>
+                    <uuid>14f38b49d0e6445c8d1b37ab1a95b950</uuid>
+                    <name>List all Apache2 services (discovery)</name>
+                    <type>DEPENDENT</type>
+                    <key>discovery.apache2_simple-list_instances</key>
+                    <delay>0</delay>
+                    <history>1h</history>
+                    <value_type>TEXT</value_type>
+                    <trends>0</trends>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;unit&quot;:</parameter>
+                                <parameter>&quot;{#NAME}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;load&quot;:</parameter>
+                                <parameter>&quot;{#LOAD}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;active&quot;:</parameter>
+                                <parameter>&quot;{#ACTIVE}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;sub&quot;:</parameter>
+                                <parameter>&quot;{#SUB}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>&quot;description&quot;:</parameter>
+                                <parameter>&quot;{#DESC}&quot;:</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>custom.apache2_simple-list_instances</key>
+                    </master_item>
+                </item>
+            </items>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>08c6d493c6514a2ea478cb5c5b9d05e0</uuid>
+                    <name>Apache2 website check HTTPS</name>
+                    <type>DEPENDENT</type>
+                    <key>dep.apache2_https_check</key>
+                    <delay>0</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>37d428f60d2240c9ad3f77f472bd7db6</uuid>
+                            <name>Apache2 website check HTTPS - {#NAME}</name>
+                            <type>HTTP_AGENT</type>
+                            <key>proto.apache_check_https[{#NAME}]</key>
+                            <history>1h</history>
+                            <value_type>TEXT</value_type>
+                            <trends>0</trends>
+                            <url>https://{#NAME}</url>
+                            <status_codes/>
+                            <follow_redirects>NO</follow_redirects>
+                            <retrieve_mode>HEADERS</retrieve_mode>
+                            <verify_peer>YES</verify_peer>
+                            <verify_host>YES</verify_host>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>71e29a66067047e99c954a408da6c9ee</uuid>
+                            <name>Apache2 website check HTTPS RC - {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>proto.apache_check_https_rc[{#NAME}]</key>
+                            <delay>0</delay>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>if ( value.split(&quot; &quot;)[0] != &quot;HTTP/1.1&quot; &amp;&amp; value.split(&quot; &quot;)[0] != &quot;HTTP/2&quot; ) return 0;
+
+if ( value.split(&quot; &quot;)[1] == &quot;200&quot; ) return 1;
+
+if ( value.split(&quot; &quot;)[1] &gt; 0 &amp;&amp; value.split(&quot; &quot;)[1] &lt; 255 ) return value.split(&quot; &quot;)[1];
+
+return 255;
+</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>proto.apache_check_https[{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>4799aefb2320482284372349b0cf4b7b</uuid>
+                                    <expression>last(/Custom Template Apache2 - simple/proto.apache_check_https_rc[{#NAME}])&lt;&gt;1</expression>
+                                    <name>Apache2 website returning wrong HTTP RC - https://{#NAME}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>discovery.apache2_simple-list_domains-ssl</key>
+                    </master_item>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>19ed8c5649584bf8a4638d5d358106a4</uuid>
+                    <name>Apache2 website check HTTP</name>
+                    <type>DEPENDENT</type>
+                    <key>dep.apache2_http_check</key>
+                    <delay>0</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>073a8d9b47094c7d9c8e6150565c286a</uuid>
+                            <name>Apache2 website check HTTP - {#NAME}</name>
+                            <type>HTTP_AGENT</type>
+                            <key>proto.apache_check_http[{#NAME}]</key>
+                            <history>1h</history>
+                            <value_type>TEXT</value_type>
+                            <trends>0</trends>
+                            <url>https://{#NAME}</url>
+                            <status_codes/>
+                            <retrieve_mode>HEADERS</retrieve_mode>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>2bd9b06f574b4526a57c9fd057e01335</uuid>
+                            <name>Apache2 website check HTTP RC - {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>proto.apache_check_http_rc[{#NAME}]</key>
+                            <delay>0</delay>
+                            <preprocessing>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>if ( value.split(&quot; &quot;)[0] != &quot;HTTP/1.1&quot; &amp;&amp; value.split(&quot; &quot;)[0] != &quot;HTTP/2&quot; ) return 0;
+
+if ( value.split(&quot; &quot;)[1] == &quot;200&quot; ) return 1;
+if ( value.split(&quot; &quot;)[1] == &quot;301&quot; ) return 2;
+if ( value.split(&quot; &quot;)[1] == &quot;302&quot; ) return 2;
+
+if ( value.split(&quot; &quot;)[1] &gt; 0 &amp;&amp; value.split(&quot; &quot;)[1] &lt; 255 ) return value.split(&quot; &quot;)[1];
+
+return 255;
+</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>proto.apache_check_http[{#NAME}]</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>09dce3cd41ec4b58ae2a7289c6d1e709</uuid>
+                                    <expression>last(/Custom Template Apache2 - simple/proto.apache_check_http_rc[{#NAME}])&lt;&gt;1 and
+last(/Custom Template Apache2 - simple/proto.apache_check_http_rc[{#NAME}])&lt;&gt;2</expression>
+                                    <name>Apache2 website returning wrong HTTP RC - http://{#NAME}</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>discovery.apache2_simple-list_domains-plain</key>
+                    </master_item>
+                </discovery_rule>
+                <discovery_rule>
+                    <uuid>614784a7110d4d0181ef41d456617b5b</uuid>
+                    <name>Apache2 instance</name>
+                    <type>DEPENDENT</type>
+                    <key>dep.apache2_simple-list_instances</key>
+                    <delay>0</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>02f6a0db5cd141c2a22eebd423dc6be1</uuid>
+                            <name>Apache2 instance status - {#NAME}</name>
+                            <type>DEPENDENT</type>
+                            <key>proto.apache_instance[{#NAME}]</key>
+                            <delay>0</delay>
+                            <trends>0</trends>
+                            <preprocessing>
+                                <step>
+                                    <type>JSONPATH</type>
+                                    <parameters>
+                                        <parameter>$..[?(@.unit == &quot;{#NAME}&quot;)].sub</parameter>
+                                    </parameters>
+                                </step>
+                                <step>
+                                    <type>JAVASCRIPT</type>
+                                    <parameters>
+                                        <parameter>switch(value) {
+    case '[&quot;running&quot;]': return 1;
+    case '[&quot;dead&quot;]': return 0;
+    default: return 255;
+}</parameter>
+                                    </parameters>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>custom.apache2_simple-list_instances</key>
+                            </master_item>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>b5982eedb6cd49d1850c4032d16cbf08</uuid>
+                                    <expression>last(/Custom Template Apache2 - simple/proto.apache_instance[{#NAME}])&gt;1</expression>
+                                    <name>Apache2 instance is in undefined state {#NAME}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>0b7f9af78d054b62afdc91c0d62eacfa</uuid>
+                                    <expression>last(/Custom Template Apache2 - simple/proto.apache_instance[{#NAME}])=0</expression>
+                                    <name>Apache2 instance is stopped {#NAME}</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <master_item>
+                        <key>discovery.apache2_simple-list_instances</key>
+                    </master_item>
+                </discovery_rule>
+            </discovery_rules>
+            <tags>
+                <tag>
+                    <tag>Application</tag>
+                    <value>Apache2</value>
+                </tag>
+            </tags>
+        </template>
+    </templates>
+</zabbix_export>
